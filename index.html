@@ -1,225 +1,61 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#080d20">
-  <title>Universal AI — One Platform. Infinite Possibilities.</title>
-  <style>
-    :root {
-      --bg: #080d20;
-      --panel: rgba(20, 29, 61, .82);
-      --panel-2: #121c3b;
-      --line: rgba(132, 154, 255, .22);
-      --text: #f4f6ff;
-      --muted: #aab6d7;
-      --cyan: #5ce1ff;
-      --purple: #a78bfa;
-      --pink: #ff83cf;
-    }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0; color: var(--text); font-family: Inter, Arial, sans-serif;
-      background:
-        radial-gradient(circle at 12% 5%, rgba(47, 105, 255, .22), transparent 30rem),
-        radial-gradient(circle at 90% 20%, rgba(165, 83, 255, .18), transparent 28rem),
-        linear-gradient(145deg, #070b19, #111039 55%, #071b31);
-      min-height: 100vh;
-    }
-    button, input, textarea { font: inherit; }
-    button { cursor: pointer; }
-    .topbar {
-      position: sticky; top: 0; z-index: 10; display: flex; align-items: center;
-      justify-content: space-between; gap: 16px; padding: 17px clamp(16px, 5vw, 64px);
-      background: rgba(7, 12, 31, .82); backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--line);
-    }
-    .brand { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 800; letter-spacing: .2px; }
-    .brand-mark {
-      width: 38px; height: 38px; display: grid; place-items: center; border-radius: 12px;
-      color: #071326; background: linear-gradient(135deg, var(--cyan), var(--purple), var(--pink));
-      box-shadow: 0 0 25px rgba(92, 225, 255, .25); font-size: 21px;
-    }
-    .nav { display: flex; align-items: center; gap: 22px; }
-    .nav a { color: var(--muted); text-decoration: none; font-size: 14px; }
-    .nav a:hover { color: white; }
-    .nav-cta, .primary {
-      border: 0; border-radius: 12px; padding: 12px 17px; color: #071326; font-weight: 800;
-      background: linear-gradient(100deg, var(--cyan), #8e9cff 55%, var(--purple));
-      box-shadow: 0 8px 28px rgba(89, 132, 255, .22);
-    }
-    main { width: min(1120px, calc(100% - 36px)); margin: auto; }
-    .hero { text-align: center; padding: 76px 0 48px; }
-    .eyebrow {
-      display: inline-flex; align-items: center; gap: 8px; padding: 8px 13px; border: 1px solid var(--line);
-      border-radius: 999px; color: #cbd5ff; background: rgba(22, 35, 76, .55); font-size: 12px;
-    }
-    h1 {
-      max-width: 850px; margin: 22px auto 14px; font-size: clamp(40px, 7vw, 76px);
-      line-height: 1.04; letter-spacing: -2.5px;
-    }
-    .gradient-text {
-      background: linear-gradient(90deg, var(--cyan), #a9a2ff 50%, var(--pink));
-      -webkit-background-clip: text; background-clip: text; color: transparent;
-    }
-    .hero p { max-width: 650px; margin: 0 auto; color: var(--muted); font-size: 17px; line-height: 1.7; }
-    .hero-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-top: 27px; }
-    .secondary {
-      color: #e7eaff; border: 1px solid var(--line); border-radius: 12px; padding: 12px 17px;
-      background: rgba(18, 28, 59, .75); font-weight: 700;
-    }
-    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin: 35px 0 18px; }
-    h2 { margin: 0; font-size: clamp(23px, 4vw, 30px); }
-    .section-head p { color: var(--muted); margin: 7px 0 0; font-size: 14px; }
-    .feature-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
-    .feature {
-      position: relative; overflow: hidden; text-align: left; min-height: 170px; padding: 21px;
-      border: 1px solid var(--line); border-radius: 19px; color: var(--text);
-      background: linear-gradient(145deg, rgba(27, 42, 83, .88), rgba(25, 21, 65, .88));
-      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
-    }
-    .feature:hover { transform: translateY(-3px); border-color: rgba(92,225,255,.65); box-shadow: 0 12px 35px rgba(40, 89, 180, .15); }
-    .feature-icon { font-size: 29px; margin-bottom: 13px; }
-    .feature h3 { margin: 0 0 7px; font-size: 17px; }
-    .feature p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
-    .feature .arrow { position: absolute; top: 20px; right: 20px; color: var(--cyan); font-size: 18px; }
-    .workspace {
-      display: none; margin: 28px 0 60px; padding: clamp(18px, 4vw, 30px);
-      border: 1px solid var(--line); border-radius: 22px; background: rgba(12, 19, 44, .9);
-      box-shadow: 0 20px 60px rgba(0,0,0,.22);
-    }
-    .workspace.active { display: block; }
-    .workspace-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-    .back { color: var(--cyan); border: 0; background: transparent; padding: 8px 0; }
-    .workspace h2 { margin: 14px 0 8px; }
-    .workspace p { color: var(--muted); line-height: 1.6; }
-    .prompt-label { display: block; margin: 20px 0 9px; font-weight: 700; font-size: 14px; }
-    textarea {
-      width: 100%; min-height: 130px; resize: vertical; color: white; background: #0b1430;
-      border: 1px solid rgba(117, 145, 255, .42); border-radius: 13px; padding: 15px; outline: none;
-    }
-    textarea:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(92,225,255,.1); }
-    .notice {
-      margin-top: 15px; padding: 13px 15px; border-radius: 12px; color: #cbd7ff;
-      background: rgba(68, 91, 170, .15); border: 1px solid var(--line); font-size: 13px; line-height: 1.5;
-    }
-    .output { display: none; margin-top: 16px; padding: 15px; white-space: pre-wrap; color: #c8f6ff; background: #060b19; border: 1px solid var(--line); border-radius: 12px; font-family: monospace; }
-    footer { text-align: center; color: #8794b8; padding: 28px 15px 38px; font-size: 12px; }
-    @media (min-width: 760px) { .feature-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-    @media (max-width: 600px) {
-      .nav a { display: none; } .hero { padding-top: 55px; }
-      .feature-grid { grid-template-columns: 1fr; } .feature { min-height: 145px; }
-      h1 { letter-spacing: -1.4px; }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Universal AI</title>
+<style>
+:root{--bg:#080d1b;--panel:#10182b;--panel2:#151f36;--line:#26324c;--text:#eef4ff;--muted:#9baac5;--blue:#4e8cff;--cyan:#43d6e8}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 70% 0,#18284b 0,transparent 36%),var(--bg);color:var(--text);font:15px/1.5 Inter,system-ui,Arial,sans-serif;min-height:100vh}
+button,input,textarea{font:inherit}button{cursor:pointer;color:inherit;border:0}
+.app{display:grid;grid-template-columns:260px 1fr;min-height:100vh}.sidebar{background:#0b1222;border-right:1px solid var(--line);padding:20px 14px;display:flex;flex-direction:column;gap:18px}
+.brand{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:750;letter-spacing:.2px;padding:2px 8px}.logo{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,var(--blue),var(--cyan));display:grid;place-items:center;color:#06101d;font-weight:900}
+.newchat{background:linear-gradient(100deg,#3978ed,#267bc4);padding:12px;border-radius:12px;font-weight:650;text-align:left}
+.section{font-size:11px;color:#7183a3;text-transform:uppercase;letter-spacing:1.2px;padding:0 10px;margin:5px 0}
+.tools{display:grid;gap:5px}.tool{background:transparent;text-align:left;padding:9px 10px;border-radius:9px;color:#c5d2e8}.tool:hover,.tool.active{background:#192743;color:white}
+.sidebar-bottom{margin-top:auto;color:var(--muted);font-size:12px;padding:10px}
+.main{display:flex;flex-direction:column;min-width:0;min-height:100vh}.topbar{height:72px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 26px;gap:12px}.top-title{font-weight:650}.actions{display:flex;gap:9px}.outline,.primary{padding:9px 15px;border-radius:10px;font-weight:600}.outline{background:transparent;border:1px solid #34415e}.primary{background:#3978ed}
+.content{width:min(900px,100%);margin:0 auto;padding:44px 24px 24px;display:flex;flex-direction:column;flex:1}.welcome{text-align:center;margin:auto auto 28px;max-width:680px}.orb{width:58px;height:58px;border-radius:20px;margin:0 auto 18px;background:linear-gradient(135deg,#4e8cff,#47d7e6);box-shadow:0 0 45px #3985ff55;display:grid;place-items:center;color:#071327;font-size:27px}.welcome h1{font-size:clamp(28px,5vw,42px);line-height:1.15;margin:0 0 12px}.welcome p{color:var(--muted);margin:0}.suggestions{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:24px auto 0;width:min(650px,100%)}.suggestion{background:#111c31;border:1px solid var(--line);border-radius:12px;padding:13px;text-align:left;color:#d8e4f8}.suggestion:hover{border-color:#4d83d8;background:#172743}
+.messages{display:flex;flex-direction:column;gap:18px;padding:10px 0 24px}.message{max-width:82%;padding:14px 16px;border-radius:16px;white-space:pre-wrap}.user{align-self:flex-end;background:#2457a8}.assistant{align-self:flex-start;background:#121e34;border:1px solid var(--line)}.composer-wrap{position:sticky;bottom:0;padding:12px 0 6px;background:linear-gradient(transparent,var(--bg) 20%)}.composer{display:flex;align-items:flex-end;gap:10px;background:#111b30;border:1px solid #34415e;border-radius:17px;padding:10px}.composer textarea{flex:1;resize:none;min-height:28px;max-height:130px;background:transparent;border:0;outline:0;color:white;padding:5px}.send{background:linear-gradient(135deg,#4e8cff,#32b7d8);color:#061326;border-radius:11px;padding:9px 15px;font-weight:750}.hint{text-align:center;color:#7183a3;font-size:11px;margin:9px 0 0}
+.modal{position:fixed;inset:0;background:#030713c9;display:none;place-items:center;padding:20px;z-index:5}.modal.show{display:grid}.dialog{width:min(420px,100%);background:#111b30;border:1px solid var(--line);border-radius:18px;padding:24px}.dialog h2{margin:0 0 5px}.dialog p{color:var(--muted);font-size:13px;margin:0 0 18px}.field{width:100%;padding:12px;margin:7px 0;background:#0a1222;border:1px solid #34415e;border-radius:10px;color:white}.dialog-actions{display:flex;gap:8px;margin-top:12px}.dialog-actions button{flex:1}.close{background:transparent;border:1px solid #34415e;border-radius:10px;padding:10px}
+@media(max-width:760px){.app{grid-template-columns:1fr}.sidebar{display:none}.topbar{height:62px;padding:0 14px}.content{padding:32px 14px 18px}.suggestions{grid-template-columns:1fr}.message{max-width:94%}.top-title{font-size:14px}.outline,.primary{padding:8px 11px;font-size:13px}}
+</style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand"><div class="brand-mark">✦</div><span>Universal AI</span></div>
-    <nav class="nav" aria-label="Main navigation">
-      <a href="#features">Features</a>
-      <a href="#about">About</a>
-      <button class="nav-cta" onclick="goToFeatures()">Explore AI</button>
-    </nav>
-  </header>
-
-  <main>
-    <section class="hero" id="about">
-      <div class="eyebrow">✧ ONE PLATFORM · MANY POSSIBILITIES</div>
-      <h1>Meet your <span class="gradient-text">Universal AI.</span></h1>
-      <p>One place to create, learn, build and get things done. Explore a growing collection of AI-powered tools designed to work together.</p>
-      <div class="hero-actions">
-        <button class="primary" onclick="goToFeatures()">Explore Features&nbsp; →</button>
-        <button class="secondary" onclick="showInfo()">How it works</button>
-      </div>
-    </section>
-
-    <section id="features">
-      <div class="section-head">
-        <div><h2>Explore the AI tools</h2><p>Choose a capability to open its workspace preview.</p></div>
-      </div>
-      <div class="feature-grid" id="featureGrid"></div>
-    </section>
-
-    <section class="workspace" id="workspace" aria-live="polite">
-      <div class="workspace-top">
-        <button class="back" onclick="closeWorkspace()">← Back to all features</button>
-        <span class="eyebrow">WORKSPACE PREVIEW</span>
-      </div>
-      <h2 id="workspaceTitle">AI Workspace</h2>
-      <p id="workspaceDescription"></p>
-      <label class="prompt-label" for="userPrompt">What would you like help with?</label>
-      <textarea id="userPrompt" placeholder="Describe what you want to do..."></textarea>
-      <div class="hero-actions" style="justify-content:flex-start">
-        <button class="primary" onclick="prepareRequest()">Prepare request</button>
-        <button class="secondary" onclick="clearPrompt()">Clear</button>
-      </div>
-      <div class="notice">This is an interface prototype. AI generation is not connected yet. A secure AI service/API and backend will be added in a later development stage.</div>
-      <div class="output" id="output"></div>
-    </section>
-  </main>
-
-  <footer>Universal AI © 2026 · Your Ideas. Your Possibilities.</footer>
-
-  <script>
-    const features = [
-      { icon:"🖥️", title:"AI Screen Sharing", desc:"Understand screen content and guide users through tasks." },
-      { icon:"🎬", title:"AI Video Creator", desc:"Plan and create videos from text, images and ideas." },
-      { icon:"🎙️", title:"AI Voice Generator", desc:"Explore customizable voices and speech creation." },
-      { icon:"📄", title:"AI Document Filling", desc:"Get help understanding and completing documents." },
-      { icon:"📷", title:"AI Live Camera Assistant", desc:"Ask questions about objects, text and surroundings." },
-      { icon:"📱", title:"AI App Builder", desc:"Turn an app idea into a project plan and app structure." },
-      { icon:"🎮", title:"AI Game Builder", desc:"Plan game mechanics, characters, levels and worlds." },
-      { icon:"🌍", title:"Universal Language Understanding", desc:"Communicate, translate and work across languages." },
-      { icon:"🎧", title:"AI Customer Assistance", desc:"Design helpful support experiences for customers." },
-      { icon:"💬", title:"AI Chatbot System", desc:"Plan custom chatbots for personal, business and learning needs." }
-    ];
-
-    let activeFeature = null;
-    const grid = document.getElementById("featureGrid");
-    features.forEach((feature, index) => {
-      const card = document.createElement("button");
-      card.className = "feature";
-      card.type = "button";
-      card.innerHTML = `<span class="arrow">↗</span><div class="feature-icon">${feature.icon}</div><h3>${index + 1}. ${feature.title}</h3><p>${feature.desc}</p>`;
-      card.addEventListener("click", () => openWorkspace(feature));
-      grid.appendChild(card);
-    });
-
-    function goToFeatures() {
-      document.getElementById("features").scrollIntoView({ behavior: "smooth" });
-    }
-    function showInfo() {
-      document.getElementById("features").scrollIntoView({ behavior: "smooth" });
-      alert("Choose one of the ten AI tools to open its workspace preview. Live AI services will be connected in a later stage.");
-    }
-    function openWorkspace(feature) {
-      activeFeature = feature;
-      document.getElementById("workspaceTitle").textContent = feature.title;
-      document.getElementById("workspaceDescription").textContent = feature.desc;
-      document.getElementById("workspace").classList.add("active");
-      document.getElementById("output").style.display = "none";
-      document.getElementById("workspace").scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-    function closeWorkspace() {
-      document.getElementById("workspace").classList.remove("active");
-      goToFeatures();
-    }
-    function clearPrompt() {
-      document.getElementById("userPrompt").value = "";
-      document.getElementById("output").style.display = "none";
-    }
-    function prepareRequest() {
-      const prompt = document.getElementById("userPrompt").value.trim();
-      if (!prompt) {
-        alert("Please describe what you want help with first.");
-        return;
-      }
-      const output = document.getElementById("output");
-      output.textContent = "Request prepared for: " + activeFeature.title + "\\n\\nYour description:\\n" + prompt + "\\n\\nNext development step: connect this workspace to a secure AI backend.";
-      output.style.display = "block";
-    }
-  </script>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand"><div class="logo">U</div> Universal AI</div>
+  <button class="newchat" id="newChat">＋ &nbsp; New chat</button>
+  <div><div class="section">AI tools</div><div class="tools" id="tools">
+    <button class="tool active">✦ &nbsp; AI Assistant</button><button class="tool">⌕ &nbsp; Research</button><button class="tool">▣ &nbsp; Documents</button><button class="tool">⌘ &nbsp; Coding</button><button class="tool">▧ &nbsp; Image creator</button><button class="tool">▶ &nbsp; Video creator</button><button class="tool">♫ &nbsp; Voice generator</button><button class="tool">◉ &nbsp; Live camera</button><button class="tool">▤ &nbsp; App builder</button><button class="tool">♧ &nbsp; Game builder</button>
+  </div></div>
+  <div class="sidebar-bottom">One Platform. Infinite Possibilities.</div>
+</aside>
+<main class="main">
+  <header class="topbar"><div class="top-title">✦ &nbsp; AI Assistant</div><div class="actions"><button class="outline" id="loginBtn">Log in</button><button class="primary" id="signupBtn">Sign up</button></div></header>
+  <section class="content">
+    <div class="welcome" id="welcome"><div class="orb">✦</div><h1>What can I help you with?</h1><p>Ask anything, explore ideas, or create something new with Universal AI.</p>
+      <div class="suggestions"><button class="suggestion">✧ Explain a difficult topic in simple words</button><button class="suggestion">⌕ Research a topic and summarize it</button><button class="suggestion">▣ Help me write a professional email</button><button class="suggestion">⌘ Help me plan a website project</button></div>
+    </div>
+    <div class="messages" id="messages"></div>
+    <div class="composer-wrap"><div class="composer"><textarea id="prompt" rows="1" placeholder="Message Universal AI..."></textarea><button class="send" id="send">Send ↑</button></div><div class="hint">Demo interface · AI responses are placeholders until a model is connected</div></div>
+  </section>
+</main>
+</div>
+<div class="modal" id="authModal"><div class="dialog"><h2 id="modalTitle">Create your account</h2><p id="modalDesc">This is a frontend demonstration only.</p><form id="authForm"><input class="field" id="email" type="email" placeholder="Email address" required><input class="field" id="password" type="password" placeholder="Password" required minlength="6"><div class="dialog-actions"><button class="close" type="button" id="closeModal">Cancel</button><button class="primary" type="submit" id="authSubmit">Continue</button></div></form></div></div>
+<script>
+const messages=document.getElementById('messages'), promptBox=document.getElementById('prompt'), welcome=document.getElementById('welcome');
+function addMessage(text,who){const el=document.createElement('div');el.className='message '+who;el.textContent=text;messages.appendChild(el);welcome.style.display='none';}
+function send(text){text=(text||promptBox.value).trim();if(!text)return;addMessage(text,'user');promptBox.value='';setTimeout(()=>addMessage("Thanks for your message! The chatbot interface is ready. To provide real AI answers, we still need to connect a secure backend and an AI model.",'assistant'),450);}
+document.getElementById('send').onclick=()=>send();
+promptBox.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}});
+document.querySelectorAll('.suggestion').forEach(b=>b.onclick=()=>send(b.textContent.replace(/^[✧⌕▣⌘]\s*/,'').trim()));
+document.getElementById('newChat').onclick=()=>{messages.innerHTML='';welcome.style.display='block';};
+document.querySelectorAll('.tool').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tool').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelector('.top-title').textContent=b.textContent.trim();});
+const modal=document.getElementById('authModal');let mode='signup';
+function openAuth(m){mode=m;document.getElementById('modalTitle').textContent=m==='signup'?'Create your account':'Welcome back';document.getElementById('modalDesc').textContent='Demo only: do not use a real password. Secure account services are not connected.';document.getElementById('authSubmit').textContent=m==='signup'?'Create account':'Log in';modal.classList.add('show');}
+document.getElementById('signupBtn').onclick=()=>openAuth('signup');document.getElementById('loginBtn').onclick=()=>openAuth('login');document.getElementById('closeModal').onclick=()=>modal.classList.remove('show');
+document.getElementById('authForm').onsubmit=e=>{e.preventDefault();alert('This is only a visual demo. Real secure sign-up/login will be added with a backend.');modal.classList.remove('show');};
+</script>
 </body>
 </html>

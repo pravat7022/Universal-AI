@@ -1,31 +1,25 @@
-# Universal AI
+# Universal AI — Chatbot Frontend Demo
 
-A responsive front-end starter for the Universal AI project.
+A responsive, chat-first frontend prototype for the Universal AI project.
 
 ## Included
-- Colourful dark/neon landing page
-- Ten feature cards:
-  1. AI Screen Sharing
-  2. AI Video Creator
-  3. AI Voice Generator
-  4. AI Document Filling
-  5. AI Live Camera Assistant
-  6. AI App Builder
-  7. AI Game Builder
-  8. Universal Language Understanding
-  9. AI Customer Assistance
-  10. AI Chatbot System
-- A workspace preview for each feature
-- Mobile-friendly layout
+- Chat-first desktop and mobile layout
+- Sidebar with AI tool navigation labels
+- New chat and suggested prompts
+- Message display with placeholder assistant replies
+- Sign-up and login modal visual demo
 
-## Run locally
-Open `index.html` in a browser, or enable GitHub Pages for this repository.
+## Important limitations
+This is **not** a production chatbot or authentication system.
+- Assistant replies are placeholders; no AI model/API is connected.
+- Sign-up and login are visual demonstrations only; no account is created.
+- Do not enter real passwords or personal information.
+- A production version needs a secure backend, a real authentication provider, a database, and server-side AI model integration.
+- Never put private AI API keys in `index.html` or a public GitHub repository.
 
-## Important
-This is a front-end prototype. The buttons and workspace previews work, but live AI generation is not connected yet. Real AI features require a secure backend and API integration. Do not put private API keys in this HTML file.
-
-## Suggested GitHub setup
-1. Create a new repository named `UniversalAI`.
-2. Upload `index.html` and `README.md` to the repository root.
-3. In repository Settings → Pages, select deployment from the `main` branch and `/ (root)`.
-4. Save and wait for GitHub Pages to publish the site.
+## Publish with GitHub Pages
+1. Extract the ZIP.
+2. Open your `UniversalAI` GitHub repository.
+3. Upload/replace `index.html` and `README.md` in the repository root.
+4. Commit the changes.
+5. Open your GitHub Pages site after deployment finishes.
