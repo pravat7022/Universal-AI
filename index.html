@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080d20">
+  <title>Universal AI — One Platform. Infinite Possibilities.</title>
+  <style>
+    :root {
+      --bg: #080d20;
+      --panel: rgba(20, 29, 61, .82);
+      --panel-2: #121c3b;
+      --line: rgba(132, 154, 255, .22);
+      --text: #f4f6ff;
+      --muted: #aab6d7;
+      --cyan: #5ce1ff;
+      --purple: #a78bfa;
+      --pink: #ff83cf;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; color: var(--text); font-family: Inter, Arial, sans-serif;
+      background:
+        radial-gradient(circle at 12% 5%, rgba(47, 105, 255, .22), transparent 30rem),
+        radial-gradient(circle at 90% 20%, rgba(165, 83, 255, .18), transparent 28rem),
+        linear-gradient(145deg, #070b19, #111039 55%, #071b31);
+      min-height: 100vh;
+    }
+    button, input, textarea { font: inherit; }
+    button { cursor: pointer; }
+    .topbar {
+      position: sticky; top: 0; z-index: 10; display: flex; align-items: center;
+      justify-content: space-between; gap: 16px; padding: 17px clamp(16px, 5vw, 64px);
+      background: rgba(7, 12, 31, .82); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--line);
+    }
+    .brand { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 800; letter-spacing: .2px; }
+    .brand-mark {
+      width: 38px; height: 38px; display: grid; place-items: center; border-radius: 12px;
+      color: #071326; background: linear-gradient(135deg, var(--cyan), var(--purple), var(--pink));
+      box-shadow: 0 0 25px rgba(92, 225, 255, .25); font-size: 21px;
+    }
+    .nav { display: flex; align-items: center; gap: 22px; }
+    .nav a { color: var(--muted); text-decoration: none; font-size: 14px; }
+    .nav a:hover { color: white; }
+    .nav-cta, .primary {
+      border: 0; border-radius: 12px; padding: 12px 17px; color: #071326; font-weight: 800;
+      background: linear-gradient(100deg, var(--cyan), #8e9cff 55%, var(--purple));
+      box-shadow: 0 8px 28px rgba(89, 132, 255, .22);
+    }
+    main { width: min(1120px, calc(100% - 36px)); margin: auto; }
+    .hero { text-align: center; padding: 76px 0 48px; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px; padding: 8px 13px; border: 1px solid var(--line);
+      border-radius: 999px; color: #cbd5ff; background: rgba(22, 35, 76, .55); font-size: 12px;
+    }
+    h1 {
+      max-width: 850px; margin: 22px auto 14px; font-size: clamp(40px, 7vw, 76px);
+      line-height: 1.04; letter-spacing: -2.5px;
+    }
+    .gradient-text {
+      background: linear-gradient(90deg, var(--cyan), #a9a2ff 50%, var(--pink));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .hero p { max-width: 650px; margin: 0 auto; color: var(--muted); font-size: 17px; line-height: 1.7; }
+    .hero-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-top: 27px; }
+    .secondary {
+      color: #e7eaff; border: 1px solid var(--line); border-radius: 12px; padding: 12px 17px;
+      background: rgba(18, 28, 59, .75); font-weight: 700;
+    }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin: 35px 0 18px; }
+    h2 { margin: 0; font-size: clamp(23px, 4vw, 30px); }
+    .section-head p { color: var(--muted); margin: 7px 0 0; font-size: 14px; }
+    .feature-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
+    .feature {
+      position: relative; overflow: hidden; text-align: left; min-height: 170px; padding: 21px;
+      border: 1px solid var(--line); border-radius: 19px; color: var(--text);
+      background: linear-gradient(145deg, rgba(27, 42, 83, .88), rgba(25, 21, 65, .88));
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+    .feature:hover { transform: translateY(-3px); border-color: rgba(92,225,255,.65); box-shadow: 0 12px 35px rgba(40, 89, 180, .15); }
+    .feature-icon { font-size: 29px; margin-bottom: 13px; }
+    .feature h3 { margin: 0 0 7px; font-size: 17px; }
+    .feature p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+    .feature .arrow { position: absolute; top: 20px; right: 20px; color: var(--cyan); font-size: 18px; }
+    .workspace {
+      display: none; margin: 28px 0 60px; padding: clamp(18px, 4vw, 30px);
+      border: 1px solid var(--line); border-radius: 22px; background: rgba(12, 19, 44, .9);
+      box-shadow: 0 20px 60px rgba(0,0,0,.22);
+    }
+    .workspace.active { display: block; }
+    .workspace-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .back { color: var(--cyan); border: 0; background: transparent; padding: 8px 0; }
+    .workspace h2 { margin: 14px 0 8px; }
+    .workspace p { color: var(--muted); line-height: 1.6; }
+    .prompt-label { display: block; margin: 20px 0 9px; font-weight: 700; font-size: 14px; }
+    textarea {
+      width: 100%; min-height: 130px; resize: vertical; color: white; background: #0b1430;
+      border: 1px solid rgba(117, 145, 255, .42); border-radius: 13px; padding: 15px; outline: none;
+    }
+    textarea:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(92,225,255,.1); }
+    .notice {
+      margin-top: 15px; padding: 13px 15px; border-radius: 12px; color: #cbd7ff;
+      background: rgba(68, 91, 170, .15); border: 1px solid var(--line); font-size: 13px; line-height: 1.5;
+    }
+    .output { display: none; margin-top: 16px; padding: 15px; white-space: pre-wrap; color: #c8f6ff; background: #060b19; border: 1px solid var(--line); border-radius: 12px; font-family: monospace; }
+    footer { text-align: center; color: #8794b8; padding: 28px 15px 38px; font-size: 12px; }
+    @media (min-width: 760px) { .feature-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    @media (max-width: 600px) {
+      .nav a { display: none; } .hero { padding-top: 55px; }
+      .feature-grid { grid-template-columns: 1fr; } .feature { min-height: 145px; }
+      h1 { letter-spacing: -1.4px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark">✦</div><span>Universal AI</span></div>
+    <nav class="nav" aria-label="Main navigation">
+      <a href="#features">Features</a>
+      <a href="#about">About</a>
+      <button class="nav-cta" onclick="goToFeatures()">Explore AI</button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="about">
+      <div class="eyebrow">✧ ONE PLATFORM · MANY POSSIBILITIES</div>
+      <h1>Meet your <span class="gradient-text">Universal AI.</span></h1>
+      <p>One place to create, learn, build and get things done. Explore a growing collection of AI-powered tools designed to work together.</p>
+      <div class="hero-actions">
+        <button class="primary" onclick="goToFeatures()">Explore Features&nbsp; →</button>
+        <button class="secondary" onclick="showInfo()">How it works</button>
+      </div>
+    </section>
+
+    <section id="features">
+      <div class="section-head">
+        <div><h2>Explore the AI tools</h2><p>Choose a capability to open its workspace preview.</p></div>
+      </div>
+      <div class="feature-grid" id="featureGrid"></div>
+    </section>
+
+    <section class="workspace" id="workspace" aria-live="polite">
+      <div class="workspace-top">
+        <button class="back" onclick="closeWorkspace()">← Back to all features</button>
+        <span class="eyebrow">WORKSPACE PREVIEW</span>
+      </div>
+      <h2 id="workspaceTitle">AI Workspace</h2>
+      <p id="workspaceDescription"></p>
+      <label class="prompt-label" for="userPrompt">What would you like help with?</label>
+      <textarea id="userPrompt" placeholder="Describe what you want to do..."></textarea>
+      <div class="hero-actions" style="justify-content:flex-start">
+        <button class="primary" onclick="prepareRequest()">Prepare request</button>
+        <button class="secondary" onclick="clearPrompt()">Clear</button>
+      </div>
+      <div class="notice">This is an interface prototype. AI generation is not connected yet. A secure AI service/API and backend will be added in a later development stage.</div>
+      <div class="output" id="output"></div>
+    </section>
+  </main>
+
+  <footer>Universal AI © 2026 · Your Ideas. Your Possibilities.</footer>
+
+  <script>
+    const features = [
+      { icon:"🖥️", title:"AI Screen Sharing", desc:"Understand screen content and guide users through tasks." },
+      { icon:"🎬", title:"AI Video Creator", desc:"Plan and create videos from text, images and ideas." },
+      { icon:"🎙️", title:"AI Voice Generator", desc:"Explore customizable voices and speech creation." },
+      { icon:"📄", title:"AI Document Filling", desc:"Get help understanding and completing documents." },
+      { icon:"📷", title:"AI Live Camera Assistant", desc:"Ask questions about objects, text and surroundings." },
+      { icon:"📱", title:"AI App Builder", desc:"Turn an app idea into a project plan and app structure." },
+      { icon:"🎮", title:"AI Game Builder", desc:"Plan game mechanics, characters, levels and worlds." },
+      { icon:"🌍", title:"Universal Language Understanding", desc:"Communicate, translate and work across languages." },
+      { icon:"🎧", title:"AI Customer Assistance", desc:"Design helpful support experiences for customers." },
+      { icon:"💬", title:"AI Chatbot System", desc:"Plan custom chatbots for personal, business and learning needs." }
+    ];
+
+    let activeFeature = null;
+    const grid = document.getElementById("featureGrid");
+    features.forEach((feature, index) => {
+      const card = document.createElement("button");
+      card.className = "feature";
+      card.type = "button";
+      card.innerHTML = `<span class="arrow">↗</span><div class="feature-icon">${feature.icon}</div><h3>${index + 1}. ${feature.title}</h3><p>${feature.desc}</p>`;
+      card.addEventListener("click", () => openWorkspace(feature));
+      grid.appendChild(card);
+    });
+
+    function goToFeatures() {
+      document.getElementById("features").scrollIntoView({ behavior: "smooth" });
+    }
+    function showInfo() {
+      document.getElementById("features").scrollIntoView({ behavior: "smooth" });
+      alert("Choose one of the ten AI tools to open its workspace preview. Live AI services will be connected in a later stage.");
+    }
+    function openWorkspace(feature) {
+      activeFeature = feature;
+      document.getElementById("workspaceTitle").textContent = feature.title;
+      document.getElementById("workspaceDescription").textContent = feature.desc;
+      document.getElementById("workspace").classList.add("active");
+      document.getElementById("output").style.display = "none";
+      document.getElementById("workspace").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    function closeWorkspace() {
+      document.getElementById("workspace").classList.remove("active");
+      goToFeatures();
+    }
+    function clearPrompt() {
+      document.getElementById("userPrompt").value = "";
+      document.getElementById("output").style.display = "none";
+    }
+    function prepareRequest() {
+      const prompt = document.getElementById("userPrompt").value.trim();
+      if (!prompt) {
+        alert("Please describe what you want help with first.");
+        return;
+      }
+      const output = document.getElementById("output");
+      output.textContent = "Request prepared for: " + activeFeature.title + "\\n\\nYour description:\\n" + prompt + "\\n\\nNext development step: connect this workspace to a secure AI backend.";
+      output.style.display = "block";
+    }
+  </script>
+</body>
+</html>
