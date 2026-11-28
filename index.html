@@ -4,84 +4,500 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Universal AI</title>
+
 <style>
-:root{--bg:#080d1b;--panel:#10182b;--panel2:#151f36;--line:#26324c;--text:#eef4ff;--muted:#9baac5;--blue:#4e8cff;--cyan:#43d6e8}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 70% 0,#18284b 0,transparent 36%),var(--bg);color:var(--text);font:15px/1.5 Inter,system-ui,Arial,sans-serif;min-height:100vh}
-button,input,textarea{font:inherit}button{cursor:pointer;color:inherit;border:0}
-.app{display:grid;grid-template-columns:260px 1fr;min-height:100vh}.sidebar{background:#0b1222;border-right:1px solid var(--line);padding:20px 14px;display:flex;flex-direction:column;gap:18px}
-.brand{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:750;letter-spacing:.2px;padding:2px 8px}.logo{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,var(--blue),var(--cyan));display:grid;place-items:center;color:#06101d;font-weight:900}
-.newchat{background:linear-gradient(100deg,#3978ed,#267bc4);padding:12px;border-radius:12px;font-weight:650;text-align:left}
-.section{font-size:11px;color:#7183a3;text-transform:uppercase;letter-spacing:1.2px;padding:0 10px;margin:5px 0}
-.tools{display:grid;gap:5px}.tool{background:transparent;text-align:left;padding:9px 10px;border-radius:9px;color:#c5d2e8}.tool:hover,.tool.active{background:#192743;color:white}
+:root{
+--bg:#080d1b;--panel:#10182b;--panel2:#151f36;
+--line:#26324c;--text:#eef4ff;--muted:#9baac5;
+--blue:#4e8cff;--cyan:#43d6e8
+}
+*{box-sizing:border-box}
+body{
+margin:0;background:radial-gradient(circle at 70% 0,#18284b 0,transparent 36%),var(--bg);
+color:var(--text);font:15px/1.5 Inter,system-ui,Arial,sans-serif;min-height:100vh
+}
+button,input,textarea{font:inherit}
+button{cursor:pointer;color:inherit;border:0}
+.app{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+.sidebar{
+background:#0b1222;border-right:1px solid var(--line);
+padding:20px 14px;display:flex;flex-direction:column;gap:18px;
+min-height:100vh
+}
+.brand{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:750;padding:2px 8px}
+.logo{
+width:34px;height:34px;border-radius:11px;
+background:linear-gradient(135deg,var(--blue),var(--cyan));
+display:grid;place-items:center;color:#06101d;font-weight:900
+}
+.newchat{
+background:linear-gradient(100deg,#3978ed,#267bc4);
+padding:12px;border-radius:12px;font-weight:650;text-align:left
+}
+.section{
+font-size:11px;color:#7183a3;text-transform:uppercase;
+letter-spacing:1.2px;padding:0 10px;margin:5px 0
+}
+.tools{display:grid;gap:5px}
+.tool{
+background:transparent;text-align:left;padding:9px 10px;
+border-radius:9px;color:#c5d2e8
+}
+.tool:hover,.tool.active{background:#192743;color:white}
+.history-list{display:grid;gap:5px;max-height:42vh;overflow-y:auto}
+.history-item{
+display:flex;align-items:center;gap:6px;width:100%;
+background:transparent;text-align:left;padding:9px 10px;
+border-radius:9px;color:#c5d2e8;font-size:13px
+}
+.history-item:hover,.history-item.active{background:#192743;color:white}
+.history-item span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.empty-history{font-size:12px;color:#7183a3;padding:8px 10px}
 .sidebar-bottom{margin-top:auto;color:var(--muted);font-size:12px;padding:10px}
-.main{display:flex;flex-direction:column;min-width:0;min-height:100vh}.topbar{height:72px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 26px;gap:12px}.top-title{font-weight:650}.actions{display:flex;gap:9px}.outline,.primary{padding:9px 15px;border-radius:10px;font-weight:600}.outline{background:transparent;border:1px solid #34415e}.primary{background:#3978ed}
-.content{width:min(900px,100%);margin:0 auto;padding:44px 24px 24px;display:flex;flex-direction:column;flex:1}.welcome{text-align:center;margin:auto auto 28px;max-width:680px}.orb{width:58px;height:58px;border-radius:20px;margin:0 auto 18px;background:linear-gradient(135deg,#4e8cff,#47d7e6);box-shadow:0 0 45px #3985ff55;display:grid;place-items:center;color:#071327;font-size:27px}.welcome h1{font-size:clamp(28px,5vw,42px);line-height:1.15;margin:0 0 12px}.welcome p{color:var(--muted);margin:0}.suggestions{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:24px auto 0;width:min(650px,100%)}.suggestion{background:#111c31;border:1px solid var(--line);border-radius:12px;padding:13px;text-align:left;color:#d8e4f8}.suggestion:hover{border-color:#4d83d8;background:#172743}
-.messages{display:flex;flex-direction:column;gap:18px;padding:10px 0 24px}.message{max-width:82%;padding:14px 16px;border-radius:16px;white-space:pre-wrap}.user{align-self:flex-end;background:#2457a8}.assistant{align-self:flex-start;background:#121e34;border:1px solid var(--line)}.composer-wrap{position:sticky;bottom:0;padding:12px 0 6px;background:linear-gradient(transparent,var(--bg) 20%)}.composer{display:flex;align-items:flex-end;gap:10px;background:#111b30;border:1px solid #34415e;border-radius:17px;padding:10px}.composer textarea{flex:1;resize:none;min-height:28px;max-height:130px;background:transparent;border:0;outline:0;color:white;padding:5px}.send{background:linear-gradient(135deg,#4e8cff,#32b7d8);color:#061326;border-radius:11px;padding:9px 15px;font-weight:750}.hint{text-align:center;color:#7183a3;font-size:11px;margin:9px 0 0}
-.modal{position:fixed;inset:0;background:#030713c9;display:none;place-items:center;padding:20px;z-index:5}.modal.show{display:grid}.dialog{width:min(420px,100%);background:#111b30;border:1px solid var(--line);border-radius:18px;padding:24px}.dialog h2{margin:0 0 5px}.dialog p{color:var(--muted);font-size:13px;margin:0 0 18px}.field{width:100%;padding:12px;margin:7px 0;background:#0a1222;border:1px solid #34415e;border-radius:10px;color:white}.dialog-actions{display:flex;gap:8px;margin-top:12px}.dialog-actions button{flex:1}.close{background:transparent;border:1px solid #34415e;border-radius:10px;padding:10px}
-@media(max-width:760px){.app{grid-template-columns:1fr}.sidebar{display:none}.topbar{height:62px;padding:0 14px}.content{padding:32px 14px 18px}.suggestions{grid-template-columns:1fr}.message{max-width:94%}.top-title{font-size:14px}.outline,.primary{padding:8px 11px;font-size:13px}}
+.main{display:flex;flex-direction:column;min-width:0;min-height:100vh}
+.topbar{
+height:72px;border-bottom:1px solid var(--line);
+display:flex;align-items:center;justify-content:space-between;
+padding:0 26px;gap:12px
+}
+.top-title{font-weight:650}
+.actions{display:flex;gap:9px}
+.outline,.primary{padding:9px 15px;border-radius:10px;font-weight:600}
+.outline{background:transparent;border:1px solid #34415e}
+.primary{background:#3978ed}
+.content{
+width:min(900px,100%);margin:0 auto;padding:44px 24px 24px;
+display:flex;flex-direction:column;flex:1;min-height:0
+}
+.welcome{text-align:center;margin:auto auto 28px;max-width:680px}
+.orb{
+width:58px;height:58px;border-radius:20px;margin:0 auto 18px;
+background:linear-gradient(135deg,#4e8cff,#47d7e6);
+box-shadow:0 0 45px #3985ff55;display:grid;place-items:center;
+color:#071327;font-size:27px
+}
+.welcome h1{font-size:clamp(28px,5vw,42px);line-height:1.15;margin:0 0 12px}
+.welcome p{color:var(--muted);margin:0}
+.suggestions{
+display:grid;grid-template-columns:repeat(2,1fr);
+gap:10px;margin:24px auto 0;width:min(650px,100%)
+}
+.suggestion{
+background:#111c31;border:1px solid var(--line);
+border-radius:12px;padding:13px;text-align:left;color:#d8e4f8
+}
+.suggestion:hover{border-color:#4d83d8;background:#172743}
+.messages{display:flex;flex-direction:column;gap:18px;padding:10px 0 24px}
+.message{
+max-width:82%;padding:14px 16px;border-radius:16px;
+white-space:pre-wrap;overflow-wrap:anywhere
+}
+.user{align-self:flex-end;background:#2457a8}
+.assistant{align-self:flex-start;background:#121e34;border:1px solid var(--line)}
+.composer-wrap{
+position:sticky;bottom:0;padding:12px 0 6px;
+background:linear-gradient(transparent,var(--bg) 20%)
+}
+.composer{
+display:flex;align-items:flex-end;gap:10px;
+background:#111b30;border:1px solid #34415e;
+border-radius:17px;padding:10px
+}
+.composer textarea{
+flex:1;resize:none;min-height:28px;max-height:130px;
+background:transparent;border:0;outline:0;color:white;padding:5px
+}
+.send{
+background:linear-gradient(135deg,#4e8cff,#32b7d8);
+color:#061326;border-radius:11px;padding:9px 15px;font-weight:750
+}
+.hint{text-align:center;color:#7183a3;font-size:11px;margin:9px 0 0}
+.modal{
+position:fixed;inset:0;background:#030713c9;display:none;
+place-items:center;padding:20px;z-index:5
+}
+.modal.show{display:grid}
+.dialog{
+width:min(420px,100%);background:#111b30;
+border:1px solid var(--line);border-radius:18px;padding:24px
+}
+.dialog h2{margin:0 0 5px}
+.dialog p{color:var(--muted);font-size:13px;margin:0 0 18px}
+.field{
+width:100%;padding:12px;margin:7px 0;background:#0a1222;
+border:1px solid #34415e;border-radius:10px;color:white
+}
+.dialog-actions{display:flex;gap:8px;margin-top:12px}
+.dialog-actions button{flex:1}
+.close{
+background:transparent;border:1px solid #34415e;
+border-radius:10px;padding:10px
+}
+@media(max-width:760px){
+.app{grid-template-columns:1fr}
+.sidebar{
+display:none;position:fixed;z-index:4;top:0;bottom:0;
+left:0;width:min(290px,85vw);overflow-y:auto;
+box-shadow:10px 0 35px #0008
+}
+.sidebar.mobile-open{display:flex}
+.topbar{height:62px;padding:0 12px}
+.content{padding:32px 14px 18px}
+.suggestions{grid-template-columns:1fr}
+.message{max-width:94%}
+.top-title{font-size:14px}
+.outline,.primary{padding:8px 11px;font-size:13px}
+}
 </style>
 </head>
+
 <body>
 <div class="app">
-<aside class="sidebar">
+
+<aside class="sidebar" id="sidebar">
   <div class="brand"><div class="logo">U</div> Universal AI</div>
+
   <button class="newchat" id="newChat">＋ &nbsp; New chat</button>
-  <div><div class="section">AI tools</div><div class="tools" id="tools">
-    <button class="tool active">✦ &nbsp; AI Assistant</button><button class="tool">⌕ &nbsp; Research</button><button class="tool">▣ &nbsp; Documents</button><button class="tool">⌘ &nbsp; Coding</button><button class="tool">▧ &nbsp; Image creator</button><button class="tool">▶ &nbsp; Video creator</button><button class="tool">♫ &nbsp; Voice generator</button><button class="tool">◉ &nbsp; Live camera</button><button class="tool">▤ &nbsp; App builder</button><button class="tool">♧ &nbsp; Game builder</button>
-  </div></div>
+
+  <div>
+    <div class="section">Chat History</div>
+    <div class="history-list" id="historyList"></div>
+  </div>
+
+  <div>
+    <div class="section">AI tools</div>
+    <div class="tools" id="tools">
+      <button class="tool active">✦ &nbsp; AI Assistant</button>
+      <button class="tool">⌕ &nbsp; Research</button>
+      <button class="tool">▣ &nbsp; Documents</button>
+      <button class="tool">⌘ &nbsp; Coding</button>
+      <button class="tool">▧ &nbsp; Image creator</button>
+      <button class="tool">▶ &nbsp; Video creator</button>
+      <button class="tool">♫ &nbsp; Voice generator</button>
+      <button class="tool">◉ &nbsp; Live camera</button>
+      <button class="tool">▤ &nbsp; App builder</button>
+      <button class="tool">♧ &nbsp; Game builder</button>
+    </div>
+  </div>
+
   <div class="sidebar-bottom">One Platform. Infinite Possibilities.</div>
 </aside>
+
 <main class="main">
-  <header class="topbar"><div class="top-title">✦ &nbsp; AI Assistant</div><div class="actions"><button class="outline" id="loginBtn">Log in</button><button class="primary" id="signupBtn">Sign up</button></div></header>
-  <section class="content">
-    <div class="welcome" id="welcome"><div class="orb">✦</div><h1>What can I help you with?</h1><p>Ask anything, explore ideas, or create something new with Universal AI.</p>
-      <div class="suggestions"><button class="suggestion">✧ Explain a difficult topic in simple words</button><button class="suggestion">⌕ Research a topic and summarize it</button><button class="suggestion">▣ Help me write a professional email</button><button class="suggestion">⌘ Help me plan a website project</button></div>
+  <header class="topbar">
+    <div class="top-title">✦ &nbsp; AI Assistant</div>
+    <div class="actions">
+      <button class="outline" id="mobileHistory">☰</button>
+      <button class="outline" id="loginBtn">Log in</button>
+      <button class="primary" id="signupBtn">Sign up</button>
     </div>
+  </header>
+
+  <section class="content">
+    <div class="welcome" id="welcome">
+      <div class="orb">✦</div>
+      <h1>What can I help you with?</h1>
+      <p>Ask anything, explore ideas, or create something new with Universal AI.</p>
+      <div class="suggestions">
+        <button class="suggestion">✧ Explain a difficult topic in simple words</button>
+        <button class="suggestion">⌕ Research a topic and summarize it</button>
+        <button class="suggestion">▣ Help me write a professional email</button>
+        <button class="suggestion">⌘ Help me plan a website project</button>
+      </div>
+    </div>
+
     <div class="messages" id="messages"></div>
-    <div class="composer-wrap"><div class="composer"><textarea id="prompt" rows="1" placeholder="Message Universal AI..."></textarea><button class="send" id="send">Send ↑</button></div><div class="hint">Demo interface · AI responses are placeholders until a model is connected</div></div>
+
+    <div class="composer-wrap">
+      <div class="composer">
+        <textarea id="prompt" rows="1" placeholder="Message Universal AI..."></textarea>
+        <button class="send" id="send">Send ↑</button>
+      </div>
+      <div class="hint">AI responses powered by Gemini · Chats saved in this browser</div>
+    </div>
   </section>
 </main>
 </div>
-<div class="modal" id="authModal"><div class="dialog"><h2 id="modalTitle">Create your account</h2><p id="modalDesc">This is a frontend demonstration only.</p><form id="authForm"><input class="field" id="email" type="email" placeholder="Email address" required><input class="field" id="password" type="password" placeholder="Password" required minlength="6"><div class="dialog-actions"><button class="close" type="button" id="closeModal">Cancel</button><button class="primary" type="submit" id="authSubmit">Continue</button></div></form></div></div>
+
+<div class="modal" id="authModal">
+  <div class="dialog">
+    <h2 id="modalTitle">Create your account</h2>
+    <p id="modalDesc">This is a frontend demonstration only.</p>
+    <form id="authForm">
+      <input class="field" id="email" type="email" placeholder="Email address" required>
+      <input class="field" id="password" type="password" placeholder="Password" required minlength="6">
+      <div class="dialog-actions">
+        <button class="close" type="button" id="closeModal">Cancel</button>
+        <button class="primary" type="submit" id="authSubmit">Continue</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <script>
-const messages=document.getElementById('messages'), promptBox=document.getElementById('prompt'), welcome=document.getElementById('welcome');
-function addMessage(text,who){const el=document.createElement('div');el.className='message '+who;el.textContent=text;messages.appendChild(el);welcome.style.display='none';}
+const messages = document.getElementById('messages');
+const promptBox = document.getElementById('prompt');
+const welcome = document.getElementById('welcome');
+const historyList = document.getElementById('historyList');
+const sidebar = document.getElementById('sidebar');
 
-async function send(text){
-  text=(text||promptBox.value).trim();
-  if(!text)return;
-  addMessage(text,'user');
-  promptBox.value='';
+const STORAGE_KEY = 'universalAI_chatHistory_v1';
 
-  try{
-    const response=await fetch('https://universal-ai-brain-api.onrender.com/chat',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({message:text})
-    });
+let chats = [];
+let activeChatId = null;
 
-    const data=await response.json();
+function loadChats() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    chats = Array.isArray(saved) ? saved : [];
+  } catch (error) {
+    chats = [];
+  }
+  renderHistory();
+}
 
-    if(!response.ok){
-      throw new Error(data.detail||'Request failed');
-    }
-
-    addMessage(data.reply,'assistant');
-  }catch(error){
-    addMessage('Error: '+error.message,'assistant');
+function saveChats() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(chats));
+  } catch (error) {
+    alert('Could not save chat history. Browser storage may be full.');
   }
 }
 
-document.getElementById('send').onclick=()=>send();
-  
-promptBox.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}});
-document.querySelectorAll('.suggestion').forEach(b=>b.onclick=()=>send(b.textContent.replace(/^[✧⌕▣⌘]\s*/,'').trim()));
-document.getElementById('newChat').onclick=()=>{messages.innerHTML='';welcome.style.display='block';};
-document.querySelectorAll('.tool').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tool').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelector('.top-title').textContent=b.textContent.trim();});
-const modal=document.getElementById('authModal');let mode='signup';
-function openAuth(m){mode=m;document.getElementById('modalTitle').textContent=m==='signup'?'Create your account':'Welcome back';document.getElementById('modalDesc').textContent='Demo only: do not use a real password. Secure account services are not connected.';document.getElementById('authSubmit').textContent=m==='signup'?'Create account':'Log in';modal.classList.add('show');}
-document.getElementById('signupBtn').onclick=()=>openAuth('signup');document.getElementById('loginBtn').onclick=()=>openAuth('login');document.getElementById('closeModal').onclick=()=>modal.classList.remove('show');
-document.getElementById('authForm').onsubmit=e=>{e.preventDefault();alert('This is only a visual demo. Real secure sign-up/login will be added with a backend.');modal.classList.remove('show');};
+function createId() {
+  return window.crypto && crypto.randomUUID
+    ? crypto.randomUUID()
+    : Date.now().toString() + Math.random().toString(16).slice(2);
+}
+
+function createChat() {
+  const chat = {
+    id: createId(),
+    title: 'New Chat',
+    messages: [],
+    updatedAt: Date.now()
+  };
+
+  chats.unshift(chat);
+  activeChatId = chat.id;
+  saveChats();
+  renderHistory();
+  renderMessages();
+  promptBox.focus();
+}
+
+function getActiveChat() {
+  return chats.find(chat => chat.id === activeChatId);
+}
+
+function renderHistory() {
+  historyList.innerHTML = '';
+
+  if (chats.length === 0) {
+    const empty = document.createElement('div');
+    empty.className = 'empty-history';
+    empty.textContent = 'No previous conversations yet.';
+    historyList.appendChild(empty);
+    return;
+  }
+
+  [...chats]
+    .sort((a, b) => b.updatedAt - a.updatedAt)
+    .forEach(chat => {
+      const button = document.createElement('button');
+      button.className = 'history-item' +
+        (chat.id === activeChatId ? ' active' : '');
+
+      const label = document.createElement('span');
+      label.textContent = chat.title || 'New Chat';
+
+      button.appendChild(label);
+      button.title = chat.title || 'New Chat';
+
+      button.onclick = () => openChat(chat.id);
+      historyList.appendChild(button);
+    });
+}
+
+function openChat(id) {
+  activeChatId = id;
+  renderMessages();
+  renderHistory();
+  sidebar.classList.remove('mobile-open');
+}
+
+function renderMessages() {
+  messages.innerHTML = '';
+  const chat = getActiveChat();
+
+  if (!chat || chat.messages.length === 0) {
+    welcome.style.display = 'block';
+    return;
+  }
+
+  welcome.style.display = 'none';
+
+  chat.messages.forEach(message => {
+    const element = document.createElement('div');
+    element.className = 'message ' + message.role;
+    element.textContent = message.text;
+    messages.appendChild(element);
+  });
+
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function addMessage(text, role) {
+  const chat = getActiveChat();
+  if (!chat) return;
+
+  chat.messages.push({
+    role: role,
+    text: text,
+    createdAt: Date.now()
+  });
+
+  chat.updatedAt = Date.now();
+
+  if (chat.messages.length === 1 && role === 'user') {
+    chat.title = text.length > 36
+      ? text.slice(0, 36) + '…'
+      : text;
+  }
+
+  saveChats();
+  renderMessages();
+  renderHistory();
+}
+
+async function send(text) {
+  text = (text || promptBox.value).trim();
+  if (!text) return;
+
+  if (!getActiveChat()) {
+    createChat();
+  }
+
+  const chatId = activeChatId;
+
+  addMessage(text, 'user');
+  promptBox.value = '';
+
+  const sendButton = document.getElementById('send');
+  sendButton.disabled = true;
+  sendButton.textContent = '...';
+
+  try {
+    const response = await fetch(
+      'https://universal-ai-brain-api.onrender.com/chat',
+      {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({message: text})
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.detail || 'Request failed');
+    }
+
+    const chat = chats.find(item => item.id === chatId);
+    if (chat) {
+      chat.messages.push({
+        role: 'assistant',
+        text: data.reply || 'No response received.',
+        createdAt: Date.now()
+      });
+      chat.updatedAt = Date.now();
+      saveChats();
+    }
+
+  } catch (error) {
+    const chat = chats.find(item => item.id === chatId);
+    if (chat) {
+      chat.messages.push({
+        role: 'assistant',
+        text: 'Error: ' + error.message,
+        createdAt: Date.now()
+      });
+      chat.updatedAt = Date.now();
+      saveChats();
+    }
+  } finally {
+    sendButton.disabled = false;
+    sendButton.textContent = 'Send ↑';
+    renderHistory();
+
+    if (activeChatId === chatId) {
+      renderMessages();
+    }
+  }
+}
+
+document.getElementById('send').onclick = () => send();
+
+promptBox.addEventListener('keydown', event => {
+  if (event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault();
+    send();
+  }
+});
+
+document.querySelectorAll('.suggestion').forEach(button => {
+  button.onclick = () => {
+    send(button.textContent.replace(/^[✧⌕▣⌘]\s*/, '').trim());
+  };
+});
+
+document.getElementById('newChat').onclick = createChat;
+
+document.getElementById('mobileHistory').onclick = () => {
+  sidebar.classList.toggle('mobile-open');
+};
+
+document.querySelectorAll('.tool').forEach(button => {
+  button.onclick = () => {
+    document.querySelectorAll('.tool').forEach(item =>
+      item.classList.remove('active')
+    );
+    button.classList.add('active');
+    document.querySelector('.top-title').textContent =
+      button.textContent.trim();
+  };
+});
+
+const modal = document.getElementById('authModal');
+let mode = 'signup';
+
+function openAuth(value) {
+  mode = value;
+  document.getElementById('modalTitle').textContent =
+    mode === 'signup' ? 'Create your account' : 'Welcome back';
+
+  document.getElementById('modalDesc').textContent =
+    'Demo only: secure account services are not connected yet.';
+
+  document.getElementById('authSubmit').textContent =
+    mode === 'signup' ? 'Create account' : 'Log in';
+
+  modal.classList.add('show');
+}
+
+document.getElementById('signupBtn').onclick = () => openAuth('signup');
+document.getElementById('loginBtn').onclick = () => openAuth('login');
+document.getElementById('closeModal').onclick = () =>
+  modal.classList.remove('show');
+
+document.getElementById('authForm').onsubmit = event => {
+  event.preventDefault();
+  alert('Secure sign-up and login are not connected yet.');
+  modal.classList.remove('show');
+};
+
+loadChats();
 </script>
 </body>
-</html>
+  </html>
+  
