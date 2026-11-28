@@ -1,15 +1,22 @@
+
 import os
+import logging
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from openai import OpenAI
+from google import genai
 
-app = FastAPI(title="Universal AI Backend")
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+app = FastAPI(title="Universal AI API")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Restrict to your website URL before public launch.
+    allow_origins=["*"],
     allow_credentials=False,
-    allow_methods=["GET", "POST"],
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
@@ -22,17 +29,39 @@ def home():
 
 @app.post("/chat")
 def chat(request: ChatRequest):
-    api_key = os.getenv("OPENAI_API_KEY")
+    api_key = os.getenv("GEMINI_API_KEY")
+
     if not api_key:
-        raise HTTPException(status_code=500, detail="OPENAI_API_KEY is not configured on the server.")
-    if not request.message.strip():
-        raise HTTPException(status_code=400, detail="Message cannot be empty.")
-    try:
-        client = OpenAI(api_key=api_key)
-        response = client.responses.create(
-            model=os.getenv("OPENAI_MODEL", "gpt-4.1-mini"),
-            input=request.message
+        raise HTTPException(
+            status_code=500,
+            detail="GEMINI_API_KEY is not configured"
         )
-        return {"reply": response.output_text}
-    except Exception:
-        raise HTTPException(status_code=502, detail="AI provider request failed. Check server logs and API account.")
+
+    if not request.message.strip():
+        raise HTTPException(
+            status_code=400,
+            detail="Message cannot be empty"
+        )
+
+    try:
+        client = genai.Client(api_key=api_key)
+
+        response = client.models.generate_content(
+            model="gemini-3.8-flash",
+            contents=request.message
+        )
+
+        reply = response.text
+
+        if not reply:
+            raise ValueError("Gemini returned an empty response")
+
+        return {"reply": reply}
+
+    except Exception as error:
+        logger.exception("Gemini API request failed")
+        raise HTTPException(
+            status_code=502,
+            detail="Gemini request failed. Check server logs."
+        )
+        
