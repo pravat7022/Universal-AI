@@ -290,6 +290,13 @@ function getActiveChat() {
   return chats.find(chat => chat.id === activeChatId);
 }
 
+
+function closeAllChatMenus() {
+  document.querySelectorAll('.chat-menu').forEach(menu => {
+    menu.remove();
+  });
+}
+
 function renderHistory() {
   historyList.innerHTML = '';
 
@@ -304,27 +311,84 @@ function renderHistory() {
   [...chats]
     .sort((a, b) => b.updatedAt - a.updatedAt)
     .forEach(chat => {
+      const item = document.createElement('div');
+      item.style.position = 'relative';
+      item.style.display = 'flex';
+      item.style.alignItems = 'center';
+
       const button = document.createElement('button');
       button.className = 'history-item' +
         (chat.id === activeChatId ? ' active' : '');
+      button.style.flex = '1';
 
       const label = document.createElement('span');
       label.textContent = chat.title || 'New Chat';
-
       button.appendChild(label);
-      button.title = chat.title || 'New Chat';
-
       button.onclick = () => openChat(chat.id);
-      historyList.appendChild(button);
+
+      const more = document.createElement('button');
+      more.textContent = '⋮';
+      more.className = 'history-item';
+      more.style.width = '38px';
+      more.style.flex = 'none';
+
+      more.onclick = (event) => {
+        event.stopPropagation();
+        closeAllChatMenus();
+
+        const menu = document.createElement('div');
+        menu.className = 'chat-menu';
+        menu.style.cssText =
+          'position:absolute;right:0;top:38px;background:#17243b;border:1px solid #34415e;border-radius:10px;padding:6px;z-index:20;min-width:130px;';
+
+        const rename = document.createElement('button');
+        rename.textContent = 'Rename';
+        rename.className = 'tool';
+        rename.style.width = '100%';
+        rename.onclick = () => {
+          const title = prompt('Enter new chat name:', chat.title);
+          if (title && title.trim()) {
+            chat.title = title.trim();
+            saveChats();
+            renderHistory();
+          }
+          closeAllChatMenus();
+        };
+
+        const remove = document.createElement('button');
+        remove.textContent = 'Delete';
+        remove.className = 'tool';
+        remove.style.width = '100%';
+        remove.onclick = () => {
+          if (confirm('Delete this conversation?')) {
+            chats = chats.filter(c => c.id !== chat.id);
+            if (activeChatId === chat.id) {
+              activeChatId = null;
+              renderMessages();
+            }
+            saveChats();
+            renderHistory();
+          }
+          closeAllChatMenus();
+        };
+
+        menu.append(rename, remove);
+        item.appendChild(menu);
+      };
+
+      item.append(button, more);
+      historyList.appendChild(item);
     });
 }
 
 function openChat(id) {
+  closeAllChatMenus();
   activeChatId = id;
   renderMessages();
   renderHistory();
   sidebar.classList.remove('mobile-open');
 }
+  
 
 function renderMessages() {
   messages.innerHTML = '';
